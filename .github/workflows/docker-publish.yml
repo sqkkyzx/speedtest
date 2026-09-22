@@ -88,12 +88,7 @@ jobs:
             curl -L https://ipinfo.io/data/free/country_asn.mmdb?token=${{ secrets.IPINFO_APIKEY }} -o backend/country_asn.mmdb
           fi
 
-      # Set up QEMU for multi-arch builds
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v4
-
-      # Set up BuildKit Docker container builder to be able to build
-      # multi-platform images and export cache
+      # Set up BuildKit Docker container builder and export cache
       # https://github.com/docker/setup-buildx-action
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
@@ -143,7 +138,7 @@ jobs:
         with:
           context: .
           file: ${{ matrix.dockerfile }}
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          platforms: linux/amd64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
